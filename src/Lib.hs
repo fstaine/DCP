@@ -6,8 +6,10 @@ module Lib
 
 import Control.Monad (filterM)
 import Data.List as List
+import Data.String as String
+import String.Split as Split
+import Data.Tuple as Tuple
 
-powerset = filterM (const [True, False])
 
 -- Pb1
 -- Given a list of numbers and a number k, return whether any two numbers from the list add up to k.
@@ -57,25 +59,29 @@ pb3 :: IO()
 pb3 = let 
     tree = Branch "root" 
         (Branch "left" 
-            (Branch "left.left" 
+            Empty
+            (Branch "left.right" 
                 Empty 
-                Empty) 
-            Empty) 
+                Empty) ) 
         (Branch "right" Empty Empty)
     s = serialize tree
+    d = deserialize s
+    s' = serialize tree
     in
-      putStrLn s
+      putStrLn $ show s
 
 
 serialize :: Tree String -> String
-serialize t = case t of 
-    Empty -> ""
-    Branch content left right -> 
-        "(" ++ show content ++ "," ++ (serialize left) ++ "," ++ (serialize right) ++ ")"
+serialize Empty = ""
+serialize (Branch content left right) = content ++ ";" ++ (serialize left) ++ ";" ++ (serialize right)
 
 deserialize :: String -> Tree String
-deserialize = deserialize'
+deserialize s = Tuple.fst $ deserialize' $ Split.splitOn "," s
 
-deserialize' :: String -> Tree String
-deserialize' "" = Empty
-deserialize' s = 
+deserialize' :: [String] -> (Tree String, [String])
+deserialize' [] = (Empty, [])
+deserialize' (x:xs) = let 
+        (left, rest1) = deserialize' xs
+        (right, rest2) = deserialize' rest1
+    in
+        (Branch x left right, rest2)
