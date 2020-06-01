@@ -8,21 +8,12 @@ import Control.Monad (filterM)
 import Data.List as List
 import Data.String as String
 import Data.Tuple as Tuple
-
+import Data.List.Split as Split
 
 
 {-
 ------- Utils --------
 -}
-
-
-
-splitOn :: Char -> String -> [String]
-splitOn = splitOn' ""
-
-splitOn' :: String -> Char -> String -> [String]
-splitOn' acc c [] = [reverse acc]
-splitOn' acc c (x:xs) = if c == x then reverse acc : splitOn' [] c xs else splitOn' (x:acc) c xs
 
 
 mapFirst :: (a -> b) -> (a, c) -> (b, c)
@@ -76,8 +67,8 @@ solvePb2 l = let
 -- pb3
 -- Given the root to a binary tree, implement serialize(root), which serializes the tree into a string, and deserialize(s), which deserializes the string back into the tree.
 
-data Tree a = Empty | Branch a (Tree a) (Tree a)
-    deriving (Show, Eq)
+--data Tree a = Empty | Branch a (Tree a) (Tree a)
+--    deriving (Show, Eq)
 
 
 pb3 :: IO()
@@ -252,7 +243,7 @@ isFile :: String -> Bool
 isFile = elem '.'
 
 splitPaths :: String -> [String]
-splitPaths = splitOn '\n'
+splitPaths = splitOn "\n"
 
 splitDepthName :: String -> (Int, String)
 splitDepthName = splitDepthName'
